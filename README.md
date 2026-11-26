@@ -1,4 +1,4 @@
-# plain-language-eval · 说人话评测
+# soft-quality-eval · 软质量评测（说人话）
 
 **评测一份回答「说没说人话」**——不是文笔，是读者能不能一次读懂、能不能高效拼出答案。
 
@@ -8,8 +8,8 @@
 - **信息组织层**（8 项）：散在文中的信息，读者能不能高效拼起来
 
 ```
-git clone <this repo>
-cd plain-language-eval
+git clone git@github.com:stardust-yao/soft-quality-eval.git
+cd soft-quality-eval
 pip install -r requirements.txt
 python tests/test_reproduce.py                    # 先验环境（11 项锚点）
 python -m plaineval.cli cases/case01 --html out/report.html

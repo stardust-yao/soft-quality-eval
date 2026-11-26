@@ -3,9 +3,9 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "plain-language-eval"
+name = "soft-quality-eval"
 version = "0.1.0"
-description = "评测一份回答的「信息组织」——八项指标，分基线与评估"
+description = "软质量评测（说人话）：措辞 3 项 + 信息组织 8 项，分基线/评估/观察"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
