@@ -62,7 +62,7 @@ def write_html(res: dict, path: str) -> None:
 
     p = []
     p.append(f"""<div class="kicker">信息组织评测报告 · plain-language-eval</div>
-<h1>{e(meta.get('case_id', 'Case'))}　信息组织八项结果</h1>
+<h1>{e(meta.get('case_id', 'Case'))}　软质量评测结果</h1>
 <p class="dim">A = {e(an)}　B = {e(bn)}
 {f'　人工偏好：{e(meta.get("human_preference"))}' if meta.get("human_preference") else ''}</p>""")
 

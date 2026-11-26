@@ -74,18 +74,21 @@ EVIDENCE_SOURCES = [
     {"id": "E5", "name": "Agent 自己的输出", "proves": "无", "boundary": "禁止作为证据（循环论证）"},
 ]
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
-EXAMPLE_INVENTORY = os.path.join(DATA_DIR, "inventory_example.json")
+# 不再往包里放领域数据：清单属于 case，放在 cases/<case>/inventory.json
+EXAMPLE_INVENTORY = None
 
 
 def load_inventory(path: str | None = None) -> list[tuple[str, re.Pattern]]:
     """读概念清单：[[概念, 正则], ...]
 
-    清单是**领域相关**的——本仓库带的是某个 回答 A 项目的例子（60 项）。
+    清单是**领域相关**的——本仓库带的是 `cases/demo/inventory.json`，只有 3 项，仅作演示。
     换项目必须自己建：把该领域里"内行才懂、外行看到会卡住"的说法列出来。
     """
-    p = path or EXAMPLE_INVENTORY
-    raw = json.load(open(p, encoding="utf-8"))
+    if path is None:
+        raise FileNotFoundError(
+            "没有给概念清单。清单是领域相关的，请在 aspects.json 里用 inventory 字段"
+            "指向 cases/<case>/inventory.json，或参考 cases/demo/inventory.json 的格式自建。")
+    raw = json.load(open(path, encoding="utf-8"))
     inv = raw["inventory"] if isinstance(raw, dict) else raw
     return [(term, re.compile(pat, re.IGNORECASE if re.search(r"[A-Za-z]", pat) else 0))
             for term, pat in inv]
@@ -165,7 +168,7 @@ def run(text: str, inventory_path: str | None = None,
         "判定顺序": "E1 → E4 → E2/E3 任一命中即豁免；全不命中且属领域术语 → 未解释；材料缺失 → 待查不扣分",
         "候选词数": len(cands),
         "候选": [{"概念": c["concept"], "原文形式": c["surface"]} for c in cands],
-        "清单来源": inventory_path or "data/inventory_example.json（示例，需替换成本领域的）",
+        "清单来源": inventory_path or "（未提供）",
     }
     if judgments_path and os.path.exists(judgments_path):
         js = json.load(open(judgments_path, encoding="utf-8"))

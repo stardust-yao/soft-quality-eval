@@ -130,7 +130,7 @@ for s in sections(open("cases/你的case名/a.md", encoding="utf-8").read()):
 
 ### 信息源清单 evidence_sources.json
 
-写清楚判定时去哪找证据。仓库里有 `cases/case01/evidence_sources.json` 作模板。
+写清楚判定时去哪找证据。仓库里有 `cases/demo/evidence_sources.json` 作模板。
 
 | 编号 | 信息源 | 能证明什么 |
 |---|---|---|
@@ -147,7 +147,7 @@ for s in sections(open("cases/你的case名/a.md", encoding="utf-8").read()):
 ## 第三点五步：A2 的概念清单要自己建
 
 A2 的候选词是从一份**领域相关**的清单里定位出来的。仓库带的
-`plaineval/data/inventory_example.json` 是某个 回答 A 项目的 60 项例子，**不能直接用**。
+`cases/demo/inventory.json` 只有 3 项，**是演示用的，不能直接用**。
 
 ```
 做法：把该领域里「内行才懂、外行看到会卡住」的说法列出来

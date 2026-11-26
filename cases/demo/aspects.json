@@ -1,0 +1,175 @@
+{
+ "_说明": "示例 case（合成场景，用于回归与示范）。aspects 从 case.md 抽；blocks 是落点的 L2 语块号（0=首个标题之前）；verdict 由人判后填。",
+ "meta": {
+  "case_id": "DEMO-001",
+  "task_type": "方案选择（合成示例）",
+  "a_name": "回答 A（Markdown 标题 + 空行）",
+  "b_name": "回答 B（无空行 + 独立短行标题 + 压平表格）",
+  "human_preference": "B",
+  "n_raters": 1,
+  "_来源": "完全虚构，用于演示与回归；不含任何真实项目信息"
+ },
+ "qud": [
+  {
+   "id": "Q1",
+   "question": "两个方案各自怎样、有什么影响？"
+  },
+  {
+   "id": "Q2",
+   "question": "应该选哪个？"
+  },
+  {
+   "id": "Q3",
+   "question": "现在需要拍板什么？"
+  },
+  {
+   "id": "Q4",
+   "question": "出问题怎么回滚？"
+  }
+ ],
+ "aspects_a": [
+  {
+   "id": "aspect_1",
+   "label": "比较两个方案",
+   "blocks": [
+    2
+   ],
+   "keywords": [
+    "方案一",
+    "方案二"
+   ],
+   "verdict": "有"
+  },
+  {
+   "id": "aspect_2",
+   "label": "各自影响",
+   "blocks": [
+    3
+   ],
+   "keywords": [
+    "优势",
+    "代价",
+    "影响"
+   ],
+   "verdict": "有"
+  },
+  {
+   "id": "aspect_3",
+   "label": "给建议",
+   "blocks": [
+    1
+   ],
+   "keywords": [
+    "建议采用"
+   ],
+   "verdict": "有"
+  },
+  {
+   "id": "aspect_4",
+   "label": "拍板什么",
+   "blocks": [
+    8
+   ],
+   "keywords": [
+    "拍板"
+   ],
+   "verdict": "有"
+  },
+  {
+   "id": "aspect_5",
+   "label": "回滚方案",
+   "blocks": [],
+   "keywords": [
+    "回滚方式",
+    "回退顺序"
+   ],
+   "verdict": "无"
+  },
+  {
+   "id": "aspect_6",
+   "label": "当前情况",
+   "blocks": [
+    3
+   ],
+   "keywords": [
+    "灰度环境",
+    "用例"
+   ],
+   "verdict": "有"
+  }
+ ],
+ "aspects_b": [
+  {
+   "id": "aspect_1",
+   "label": "比较两个方案",
+   "blocks": [
+    4
+   ],
+   "keywords": [
+    "方案一",
+    "方案二"
+   ],
+   "verdict": "有"
+  },
+  {
+   "id": "aspect_2",
+   "label": "各自影响",
+   "blocks": [
+    5
+   ],
+   "keywords": [
+    "影响"
+   ],
+   "verdict": "有"
+  },
+  {
+   "id": "aspect_3",
+   "label": "给建议",
+   "blocks": [
+    1
+   ],
+   "keywords": [
+    "混合方式"
+   ],
+   "verdict": "有"
+  },
+  {
+   "id": "aspect_4",
+   "label": "拍板什么",
+   "blocks": [
+    7
+   ],
+   "keywords": [
+    "拍板"
+   ],
+   "verdict": "有"
+  },
+  {
+   "id": "aspect_5",
+   "label": "回滚方案",
+   "blocks": [
+    6
+   ],
+   "keywords": [
+    "回滚方式",
+    "回退顺序"
+   ],
+   "verdict": "有"
+  },
+  {
+   "id": "aspect_6",
+   "label": "当前情况",
+   "blocks": [
+    2
+   ],
+   "keywords": [
+    "灰度环境",
+    "用例"
+   ],
+   "verdict": "有"
+  }
+ ],
+ "inventory": "cases/demo/inventory.json",
+ "judgments_a": "cases/demo/judgments_a.json",
+ "judgments_b": "cases/demo/judgments_b.json"
+}

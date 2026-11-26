@@ -2,9 +2,9 @@
 """命令行入口
 
     # 跑一个 case（目录里要有 case.md / a.md / b.md / aspects.json）
-    plaineval cases/case01
-    plaineval cases/case01 -o out/result.json
-    plaineval cases/case01 --html out/report.html
+    plaineval cases/demo
+    plaineval cases/demo -o out/result.json
+    plaineval cases/demo --html out/report.html
 
     # 只跑一份回答（不需要对照）
     plaineval --single path/to/answer.md

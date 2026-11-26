@@ -12,7 +12,7 @@ git clone git@github.com:stardust-yao/soft-quality-eval.git
 cd soft-quality-eval
 pip install -r requirements.txt
 python tests/test_reproduce.py                    # 先验环境（11 项锚点）
-python -m plaineval.cli cases/case01 --html out/report.html
+python -m plaineval.cli cases/demo --html out/report.html
 ```
 
 ---
@@ -83,7 +83,7 @@ cases/你的case名/
      "keywords": ["方案A", "方案B"], "verdict": "有"}
   ],
   "aspects_b": [ ... ],
-  "inventory": "plaineval/data/inventory_example.json",
+  "inventory": "cases/…/inventory.json",
   "judgments_a": "cases/…/judgments_a.json"
 }
 ```
@@ -104,17 +104,17 @@ cases/你的case名/
 ```
 指标                                 A           B
 ------------------------------------------------
-A1 词次 / 词型                 854 / 389   897 / 397
-A1 MSTTR-50                   0.8835      0.8847
-A2 未解释陌生概念数                      0           2
-A3 句长均值                        27.79       23.55
-A3 每 T-unit 从句数                 2.23        2.06
+A1 词次 / 词型                 473 / 229   480 / 203
+A1 MSTTR-50                   0.8311      0.7956
+A2 未解释陌生概念数                      1           0
+A3 句长均值                        28.19       20.38
+A3 每 T-unit 从句数                 1.89        2.00
 B1 缺口数                             1           0
-B2 拍板位置%                        79.3          68
-B3 延续率                        0.2391      0.5217
-B4 列表项平均字数                      45.5        18.9
-B7 需配对数                            2           0
-B8 声明不一致数                          0           0
+B2 拍板位置%                        88.5        80.3
+B3 延续率                        0.5385      0.5833
+B4 列表项平均字数                      15.7        10.4
+B7 需配对数                            1           0
+B8 声明不一致数                          1           0
 ```
 
 **基线的数不等于质量。** 句长、块数、集中度都没有绝对好坏——现在只报数，阈值等样本积累到几十组后再划。
@@ -131,13 +131,13 @@ B8 声明不一致数                          0           0
 
 ### ② 作者句不切分号，并排除标题和表格格
 
-实测一份结构化回答的 75 个"句子"里，**28 个是标题和表格单元格（37%）**。
+实测一份结构化回答的 45 个"句子"里，**8 个是独立短行标题（18%）**，其中一份的句长被拉低 13%、延续率被压低 35%。
 
 | | 未清洗 | 清洗后 |
 |---|---|---|
-| 句数 | 51 / 75 | 47 / 47 |
-| 句长均值 | 25.96 / 18.65 | **27.79 / 23.55** |
-| 延续率 | 0.2200 / 0.3378 | **0.2391 / 0.5217** |
+| 句数 | 27 / 45 | **27 / 37** |
+| 句长均值 | 28.19 / 17.96 | 28.19 / **20.38** |
+| 延续率 | 0.5385 / 0.4318 | 0.5385 / **0.5833** |
 
 ### ③ 位置% 分母用清洗后正文
 
@@ -213,7 +213,7 @@ plaineval/
 
 | 文件 | 内容 |
 |---|---|
-| `docs/00-overview.md` | 十一项 + 归属 + 流程 + Case1 实测 |
+| `docs/00-overview.md` | 十一项 + 归属 + 流程 + 示例实测 |
 | **`docs/01-units.md`** | **切分口径（改任何指标前先读）** |
 | `docs/02-wording.md` | A1 / A2 / A3 |
 | `docs/03-info-org.md` | B1–B8 |

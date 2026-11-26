@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """plain-language-eval —— 回答的信息组织评测
 
-八项：
+十一项（措辞 3 + 信息组织 8）：
     B1 有没有（覆盖）        评估
     B2 在哪（定位）          基线
     B3 散不散（集中）        基线
@@ -13,7 +13,7 @@
 
 用法：
     from plaineval import run_case
-    result = run_case("cases/case01")
+    result = run_case("cases/demo")
 """
 from .core import LAYER, ROLE, compare, evaluate, evaluate_pair, load_case, run_case
 

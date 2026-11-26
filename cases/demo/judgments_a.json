@@ -1,0 +1,44 @@
+{
+ "_说明": "A2 逐词判定（示例）。",
+ "judgments": [
+  {
+   "concept": "双轨放量",
+   "classification": "内部数据无命中且原文未解释",
+   "occurrences": 1,
+   "evidence": {
+    "E1": "未命中",
+    "E2": "未命中",
+    "E3": "未命中",
+    "E4": "无解释"
+   },
+   "evidence_note": "问题未提及；回答里只说“按双轨放量推进”，没有定义",
+   "unmet": true
+  },
+  {
+   "concept": "灰度",
+   "classification": "问题已给概念",
+   "occurrences": 2,
+   "evidence": {
+    "E1": "命中",
+    "E2": "未命中",
+    "E3": "未命中",
+    "E4": "—"
+   },
+   "evidence_note": "问题原文有“灰度环境只覆盖两个区域”",
+   "unmet": false
+  },
+  {
+   "concept": "分层上线",
+   "classification": "问题已给概念",
+   "occurrences": 4,
+   "evidence": {
+    "E1": "命中",
+    "E2": "未命中",
+    "E3": "未命中",
+    "E4": "—"
+   },
+   "evidence_note": "问题原文有“按风险分层上线”",
+   "unmet": false
+  }
+ ]
+}

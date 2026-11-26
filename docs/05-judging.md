@@ -148,8 +148,10 @@
 // cases/<case>/judgments_a.json
 {
   "judgments": [
-    {"concept": "冒烟验证", "classification": "读者确认不熟悉，原文未充分解释",
-     "occurrences": 1, "evidence_sentence": "", "unmet": true}
+    {"concept": "双轨放量", "classification": "内部数据无命中且原文未解释",
+     "occurrences": 1,
+     "evidence": {"E1": "未命中", "E2": "未命中", "E3": "未命中", "E4": "无解释"},
+     "unmet": true}
   ]
 }
 ```
