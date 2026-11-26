@@ -139,4 +139,5 @@
 | `03-info-org.md` | B1–B8 详解 |
 | `04-writing-cases.md` | 怎么给自己建 case |
 | `05-judging.md` | 判题机制：双评者、一致率、分歧模式 |
+| **`07-scoring.md`** | **计分机制：四层怎么转化成分数** |
 | `06-references.md` | 文献 + 自研清单 + 明确没做的 |

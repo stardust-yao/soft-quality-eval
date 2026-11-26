@@ -6,7 +6,7 @@ import json
 import os
 
 from . import (a1_diversity, a2_familiarity, b3_dispersion, b4_structure,
-               b5_state, b6_verbosity, b7_anaphora, b8_declaration)
+               b5_state, b6_verbosity, b7_anaphora, b8_declaration, scoring)
 from .b_coverage_position import coverage_summary, keyword_crosscheck, position_table
 from .syntax import syntax
 
@@ -150,6 +150,35 @@ def load_case(case_dir: str) -> dict:
     }
 
 
+def score_from_file(case_dir: str, result: dict) -> dict | None:
+    """如果 case 目录里有 scoring.json，就按层3/层4 算分"""
+    p = os.path.join(case_dir, "scoring.json")
+    if not os.path.exists(p):
+        return None
+    spec = json.load(open(p, encoding="utf-8"))
+    sides = {}
+    for side in ("A", "B"):
+        objs = spec.get(side, {})
+        wording_objs = {k: v for k, v in objs.items() if k.startswith("A")}
+        info_objs = {k: v for k, v in objs.items() if k.startswith("B")}
+        sides[side] = {
+            "措辞": scoring.layer_score(wording_objs) if wording_objs else None,
+            "信息组织": scoring.layer_score(info_objs) if info_objs else None,
+        }
+        sides[side]["呈现"] = scoring.overall(sides[side]["措辞"], sides[side]["信息组织"])
+    return {
+        "刻度": scoring.scales(),
+        "A": sides["A"], "B": sides["B"],
+        "判定": {
+            "措辞": scoring.verdict(sides["A"]["呈现"]["措辞分"], sides["B"]["呈现"]["措辞分"]),
+            "信息组织": scoring.verdict(sides["A"]["呈现"]["信息组织分"], sides["B"]["呈现"]["信息组织分"]),
+            "总分_短板加权": scoring.verdict(sides["A"]["呈现"].get("总分_短板加权"),
+                                        sides["B"]["呈现"].get("总分_短板加权")),
+        },
+        "提醒": "两个维度方向可能相反。默认不合成总分——措辞与信息组织不是同一量纲。",
+    }
+
+
 def run_case(case_dir: str) -> dict:
     c = load_case(case_dir)
     if not c["a"] or not c["b"]:
@@ -159,4 +188,7 @@ def run_case(case_dir: str) -> dict:
     res["case"] = c["meta"]
     res["question"] = c["question"]
     res["compare"] = compare(res)
+    sc = score_from_file(case_dir, res)
+    if sc:
+        res["scoring"] = sc
     return res

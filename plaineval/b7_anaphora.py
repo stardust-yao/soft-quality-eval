@@ -73,12 +73,17 @@ def scan(raw: str) -> dict:
                     "原句": s,
                 })
     from collections import Counter
+    # 去重单位 = 一个可指认的阅读障碍点，不是命中次数。
+    # 「前一份 / 后一份」在同一句里 = 一处问题，不能算两处。
+    pairing_sentences = sorted({h["句序"] for h in hits if h["需配对"]})
     return {
         "作者句数": len(units),
         "回指数": len(hits),
         "每百句": round(len(hits) / max(1, len(units)) * 100, 1),
         "分类计数": dict(Counter(h["类别"] for h in hits)),
-        "需配对数": sum(1 for h in hits if h["需配对"]),
+        "需配对数": len(pairing_sentences),
+        "需配对句序": pairing_sentences,
         "明细": hits,
+        "去重单位": "一个可指认的阅读障碍点（句级）。同一句里的多个指代算一处。",
         "说明": "「需配对」= 同一句里出现两个指代（如「前一份/后一份」），读者要回前文数对象才能对上。",
     }

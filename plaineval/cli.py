@@ -65,6 +65,24 @@ def print_compare(res: dict) -> None:
         vb = b["B3_散不散"]["微观"]["共享强度分布"][k]
         print(f"  {k:<16}A {va:>3} 个    B {vb:>3} 个")
 
+    # 计分（若 case 里有 scoring.json）
+    if res.get("scoring"):
+        sc = res["scoring"]
+        print("\n【计分】层3 去重+递减+饱和，层4 三档 1:2:4（基数 %d 分）"
+              % sc["刻度"]["单次扣分基数"])
+        for side, name in (("A", "A"), ("B", "B")):
+            o = sc[side]["呈现"]
+            print(f"  {name}　措辞 {_fmt(o['措辞分'])}　信息组织 {_fmt(o['信息组织分'])}"
+                  f"　短板加权 {_fmt(o.get('总分_短板加权'))}")
+        print("\n  判定：")
+        for k, v in sc["判定"].items():
+            print(f"    {k:<14}{v}")
+        for side in ("A", "B"):
+            c = sc[side]["呈现"].get("冲突")
+            if c:
+                print(f"    {side} 维度冲突：{c}（差 {sc[side]['呈现']['差值']} 分）")
+        print("\n  " + sc["提醒"])
+
     print("\n注意：B5/B6 只给候选，判定需人或 LLM 逐句确认；B6 为观察项不计分。")
 
 
