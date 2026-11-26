@@ -19,7 +19,7 @@ import re
 
 CJK = re.compile(r"[\u4e00-\u9fa5]")
 
-# jieba 把 英文专名/术语（如 Case、Sheet、PPT） 这类标成 eng 而不是 n。
+# jieba 把英文专名/术语（如 Case、Sheet、PPT 这类）标成 eng 而不是 n。
 # 只取 n 会漏掉几乎全部英文实体，实体数会掉到每句 1 个。
 NOUN_TAGS = ("n", "eng")
 

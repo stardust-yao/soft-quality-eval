@@ -36,12 +36,15 @@ ANAPH = [
     ("泛指回指", re.compile(r"(各层|各项|同一组|整组|这一项)")),
 ]
 
+# 分类关键词：**通用默认值**，不含任何具体项目/人名。
+# 如果你的 case 里有特定角色名、文件类型，用 aspects.json 的 "anaphora_categories"
+# 覆盖对应类别，不要改这个文件。
 CAT = {
-    "人": ["Owner", "Member", "执行人", "谁"],
-    "文件": ["PPT", "Sheet", "文件", "工作簿", "包", "清单"],
-    "时间": ["11月", "10月", "Daily", "窗口", "时间", "日期"],
-    "项目": ["项目", "Case", "实例", "任务", "测试项目"],
-    "层级/分组": ["层", "组", "能力", "分类", "等级", "批次"],
+    "人": ["负责人", "执行人", "复核人", "同事", "团队", "谁", "Owner", "Member"],
+    "文件": ["文件", "文档", "表格", "清单", "工单"],
+    "时间": ["日期", "窗口", "时间", "本周", "下周", "当天"],
+    "项目": ["项目", "任务", "实例", "模块", "用例"],
+    "层级/分组": ["层", "组", "分类", "等级", "批次", "档"],
     "决策项": ["决定", "拍板", "取舍", "决策", "建议", "方案", "规则"],
 }
 
@@ -49,13 +52,14 @@ CAT = {
 PAIRING = re.compile(r"(前|后)一(份|个|条|项)")
 
 
-def _classify(s: str) -> str:
-    sc = {k: sum(s.count(w) for w in ws) for k, ws in CAT.items()}
+def _classify(s: str, cats: dict | None = None) -> str:
+    table = {**CAT, **(cats or {})}
+    sc = {k: sum(s.count(w) for w in ws) for k, ws in table.items()}
     best = max(sc.items(), key=lambda x: x[1])
     return best[0] if best[1] > 0 else "未分类"
 
 
-def scan(raw: str) -> dict:
+def scan(raw: str, categories: dict | None = None) -> dict:
     units, _ = clean_units(raw)
     hits = []
     seen = set()
@@ -68,7 +72,7 @@ def scan(raw: str) -> dict:
                 seen.add(key)
                 hits.append({
                     "句序": i, "类型": label, "表达": m.group(0),
-                    "类别": _classify(s),
+                    "类别": _classify(s, categories),
                     "需配对": bool(PAIRING.search(s)),
                     "原句": s,
                 })
