@@ -2,12 +2,12 @@
 """命令行入口
 
     # 跑一个 case（目录里要有 case.md / a.md / b.md / aspects.json）
-    infoeval cases/case01
-    infoeval cases/case01 -o out/result.json
-    infoeval cases/case01 --html out/report.html
+    plaineval cases/case01
+    plaineval cases/case01 -o out/result.json
+    plaineval cases/case01 --html out/report.html
 
     # 只跑一份回答（不需要对照）
-    infoeval --single path/to/answer.md
+    plaineval --single path/to/answer.md
 """
 from __future__ import annotations
 
@@ -69,7 +69,7 @@ def print_compare(res: dict) -> None:
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(prog="infoeval", description="回答的信息组织评测")
+    ap = argparse.ArgumentParser(prog="plaineval", description="回答的信息组织评测")
     ap.add_argument("case_dir", nargs="?", help="case 目录（含 case.md/a.md/b.md/aspects.json）")
     ap.add_argument("--single", metavar="ANSWER_MD", help="只评一份回答")
     ap.add_argument("-o", "--out", metavar="JSON", help="结果写入 JSON")

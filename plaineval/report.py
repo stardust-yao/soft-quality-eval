@@ -61,7 +61,7 @@ def write_html(res: dict, path: str) -> None:
     bn = meta.get("b_name", "B")
 
     p = []
-    p.append(f"""<div class="kicker">信息组织评测报告 · info-org-eval</div>
+    p.append(f"""<div class="kicker">信息组织评测报告 · plain-language-eval</div>
 <h1>{e(meta.get('case_id', 'Case'))}　信息组织八项结果</h1>
 <p class="dim">A = {e(an)}　B = {e(bn)}
 {f'　人工偏好：{e(meta.get("human_preference"))}' if meta.get("human_preference") else ''}</p>""")
@@ -84,8 +84,34 @@ def write_html(res: dict, path: str) -> None:
 <p><strong>评估</strong>抓明确的错。只有达到「换个人看也一样」的判据才能扣分。</p>
 <p><strong>B6 是观察项</strong>：四种口径给出三个方向，暂不计分。</p></div>""")
 
+    # A1 / A2 / A3
+    p.append("<h2>三、措辞层：A1 / A2 / A3</h2>")
+    for name, r in ((an, A), (bn, B)):
+        a1, a2, a3 = r["A1_词汇多样性"], r["A2_用词熟悉度"], r["A3_句法"]
+        p.append(f"<h3>{e(name)}</h3>")
+        p.append("<table><tbody>"
+                 f"<tr><td>A1 词次 / 词型</td><td class='num'>{a1['N_词次']} / {a1['V_词型']}</td></tr>"
+                 f"<tr><td>A1 MSTTR-50</td><td class='num'>{_fmt(a1['MSTTR50'])}</td></tr>"
+                 f"<tr><td>A1 尾部丢弃词数</td><td class='num'>{a1['尾部丢弃词数']}</td></tr>"
+                 f"<tr><td>A2 候选词数</td><td class='num'>{a2['候选词数']}</td></tr>"
+                 f"<tr><td>A2 判过 / 豁免 / 未解释</td><td class='num'>"
+                 f"{_fmt(a2.get('判过概念数'))} / {_fmt(a2.get('豁免数'))} / "
+                 f"<strong>{_fmt(a2.get('未解释陌生概念数'))}</strong></td></tr>"
+                 f"<tr><td>A3 句长均值 / P90</td><td class='num'>{_fmt(a3['句长均值'])} / {_fmt(a3['句长P90'])}</td></tr>"
+                 f"<tr><td>A3 T-unit 数</td><td class='num'>{a3['T-unit数']}</td></tr>"
+                 f"<tr><td>A3 每 T-unit 从句数</td><td class='num'>{_fmt(a3['每T-unit从句数'])}</td></tr>"
+                 "</tbody></table>")
+        if a2.get("未解释清单"):
+            p.append(f"<p class='dim'>A2 未解释：{'、'.join(e(x) for x in a2['未解释清单'])}</p>")
+    p.append("""<div class="box warn"><span class="l">A1 / A3 权重为 0</span>
+<p>A1 的词频熵与篇幅 ρ≈0.95，本质是篇幅替身；MSTTR 与人工偏好只有 4/7 一致。</p>
+<p>A3 句长是提示不是判据——长句不等于难读。两者只作基线。</p></div>""")
+    p.append("""<div class="box key"><span class="l">A2 是唯一计分项，但 K 值 pending</span>
+<p>本轮只报计数（判过 / 豁免 / 未解释），不产出分数。未解释概念该扣多少分取决于读者群体，
+没有跨 case 数据定 K 就是拍脑袋。</p></div>""")
+
     # B1
-    p.append("<h2>三、B1 覆盖</h2>")
+    p.append("<h2>四、B1 覆盖</h2>")
     for name, r in ((an, A), (bn, B)):
         c = r["B1_覆盖"]
         p.append(f"<h3>{e(name)}</h3><p>诉求 {c['total']} 项：覆盖 {c['covered']}，"
@@ -94,7 +120,7 @@ def write_html(res: dict, path: str) -> None:
             p.append(f"<p class='dim'>缺：{'、'.join(e(x) for x in c['missing'])}</p>")
 
     # B2
-    p.append("<h2>四、B2 诉求位置</h2>")
+    p.append("<h2>五、B2 诉求位置</h2>")
     rows = ""
     for x, y in zip(A["B2_在哪"]["诉求位置"], B["B2_在哪"]["诉求位置"]):
         pa = "漏答" if x["position_pct"] is None else f"{x['position_pct']}%"
@@ -105,7 +131,7 @@ def write_html(res: dict, path: str) -> None:
              f"<th>{e(an)} 落点</th></tr></thead><tbody>{rows}</tbody></table>")
 
     # B3
-    p.append("<h2>五、B3 散不散</h2>")
+    p.append("<h2>六、B3 散不散</h2>")
     for name, r in ((an, A), (bn, B)):
         m = r["B3_散不散"]["微观"]
         g = r["B3_散不散"]["宏观"]
@@ -125,7 +151,7 @@ def write_html(res: dict, path: str) -> None:
 <p>词面重叠（连续值）和实体延续率（二元值）可能给出相反方向。均值会把「两极分化」和「均匀型」抹成同一个数。</p></div>""")
 
     # B4
-    p.append("<h2>六、B4 层级</h2>")
+    p.append("<h2>七、B4 层级</h2>")
     keys = ["标题块数", "块字数中位数", "Markdown标题数", "标题层级深度",
             "列表项数", "列表项平均字数", "列表项占比"]
     rows = "".join(f"<tr><td>{e(k)}</td><td class='num'>{_fmt(A['B4_层级'].get(k))}</td>"
@@ -137,7 +163,7 @@ def write_html(res: dict, path: str) -> None:
 <p>45 字/条 = 一条里塞两三句话（段落伪装成列表）；19 字/条 = 一条一件事。</p></div>""")
 
     # B5
-    p.append("<h2>七、B5 状态 vs 推理（需人工判档）</h2>")
+    p.append("<h2>八、B5 状态 vs 推理（需人工判档）</h2>")
     if res.get("A", {}).get("B5_状态vs推理", {}).get("QUD"):
         rows = "".join(f"<tr><td>{e(q['id'])}</td><td>{e(q['question'])}</td></tr>"
                        for q in A["B5_状态vs推理"]["QUD"])
@@ -150,7 +176,7 @@ def write_html(res: dict, path: str) -> None:
 <p>判档问法：这句回答的是哪个 QUD？如果答的是「状态」，关键状态给了吗？</p></div>""")
 
     # B7 / B8
-    p.append("<h2>八、B7 指代 / B8 数量自述</h2>")
+    p.append("<h2>九、B7 指代 / B8 数量自述</h2>")
     rows = (f"<tr><td>B7 回指数</td><td class='num'>{A['B7_指代']['回指数']}</td>"
             f"<td class='num'>{B['B7_指代']['回指数']}</td></tr>"
             f"<tr><td>B7 需配对数</td><td class='num'>{A['B7_指代']['需配对数']}</td>"
@@ -165,8 +191,8 @@ def write_html(res: dict, path: str) -> None:
 <p><strong>需读者自己配对</strong>：如「前一份 / 后一份」，要回前文数出两个对象才能对上。这不是「不清」，但读者要额外推理。</p></div>""")
 
     p.append("""<footer>
-<p><strong>info-org-eval</strong>　单文件 HTML，无外部依赖，可离线打开与 Ctrl+P 导出 PDF。</p>
-<p>自动指标可用 <code>infoeval</code> 复算；判题部分（B5/B6/B7 分档）需人或 LLM 确认后写回 aspects.json。</p>
+<p><strong>plain-language-eval</strong>　单文件 HTML，无外部依赖，可离线打开与 Ctrl+P 导出 PDF。</p>
+<p>自动指标可用 <code>plaineval</code> 复算；判题部分（B5/B6/B7 分档）需人或 LLM 确认后写回 aspects.json。</p>
 </footer>""")
 
     doc = (f"<!DOCTYPE html><html lang='zh-CN'><head><meta charset='UTF-8'>"

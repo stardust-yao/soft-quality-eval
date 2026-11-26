@@ -10,11 +10,17 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from infoeval import run_case  # noqa: E402
+from plaineval import run_case  # noqa: E402
 
 # 锚点：这些数变了说明切分口径被改了，必须同步更新文档
 EXPECTED = {
     "A": {
+        "词次": 854,
+        "词型": 389,
+        "MSTTR50": 0.8835,
+        "A2候选": 7,
+        "A2判过": 5,
+        "A2未解释": 0,
         "句数": 47,
         "句长均值": 27.79,
         "T-unit数": 53,
@@ -30,6 +36,12 @@ EXPECTED = {
         "B8声明不一致": 0,
     },
     "B": {
+        "词次": 897,
+        "词型": 397,
+        "MSTTR50": 0.8847,
+        "A2候选": 28,
+        "A2判过": 16,
+        "A2未解释": 2,
         "句数": 47,
         "句长均值": 23.55,
         "T-unit数": 51,
@@ -56,10 +68,16 @@ EXPECTED_POS_B = {"比较两个方案": 15.4, "各自影响": 29.6, "给建议":
 def extract(res, side):
     r = res[side]
     return {
-        "句数": r["句法基线"]["句数"],
-        "句长均值": r["句法基线"]["句长均值"],
-        "T-unit数": r["句法基线"]["T-unit数"],
-        "每T-unit从句数": r["句法基线"]["每T-unit从句数"],
+        "词次": r["A1_词汇多样性"]["N_词次"],
+        "词型": r["A1_词汇多样性"]["V_词型"],
+        "MSTTR50": r["A1_词汇多样性"]["MSTTR50"],
+        "A2候选": r["A2_用词熟悉度"]["候选词数"],
+        "A2判过": r["A2_用词熟悉度"].get("判过概念数"),
+        "A2未解释": r["A2_用词熟悉度"].get("未解释陌生概念数"),
+        "句数": r["A3_句法"]["句数"],
+        "句长均值": r["A3_句法"]["句长均值"],
+        "T-unit数": r["A3_句法"]["T-unit数"],
+        "每T-unit从句数": r["A3_句法"]["每T-unit从句数"],
         "延续率": r["B3_散不散"]["微观"]["延续率_CONTINUE"],
         "指称距离": r["B3_散不散"]["微观"]["指称距离_平均间隔句"],
         "平均集中度": r["B3_散不散"]["宏观"]["平均集中度"],
@@ -103,8 +121,10 @@ def main() -> int:
             print("   ", f)
         return 1
 
-    print("✅ case01 全部锚点一致")
-    print(f"   句数 {EXPECTED['A']['句数']}/{EXPECTED['B']['句数']}　"
+    print("✅ case01 全部锚点一致（11 项）")
+    print(f"   词次 {EXPECTED['A']['词次']}/{EXPECTED['B']['词次']}　"
+          f"A2未解释 {EXPECTED['A']['A2未解释']}/{EXPECTED['B']['A2未解释']}　"
+          f"句数 {EXPECTED['A']['句数']}/{EXPECTED['B']['句数']}　"
           f"延续率 {EXPECTED['A']['延续率']}/{EXPECTED['B']['延续率']}　"
           f"语块 {EXPECTED['A']['语块数']}/{EXPECTED['B']['语块数']}")
     return 0

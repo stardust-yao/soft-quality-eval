@@ -3,7 +3,7 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "info-org-eval"
+name = "plain-language-eval"
 version = "0.1.0"
 description = "评测一份回答的「信息组织」——八项指标，分基线与评估"
 readme = "README.md"
@@ -12,7 +12,7 @@ license = {text = "MIT"}
 dependencies = ["jieba>=0.42"]
 
 [project.scripts]
-infoeval = "infoeval.cli:main"
+plaineval = "plaineval.cli:main"
 
 [tool.setuptools]
-packages = ["infoeval"]
+packages = ["plaineval"]

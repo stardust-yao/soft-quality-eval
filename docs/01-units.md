@@ -27,7 +27,7 @@
 
 ## 二、L2 语块怎么切
 
-`infoeval/units.py: sections()`
+`plaineval/units.py: sections()`
 
 一行被认作标题，按优先级：
 
@@ -86,7 +86,7 @@
 
 ## 四、作者句怎么切
 
-`infoeval/units.py: clean_units()`
+`plaineval/units.py: clean_units()`
 
 ```
 ① 按 。！？ 切（**不切分号**）

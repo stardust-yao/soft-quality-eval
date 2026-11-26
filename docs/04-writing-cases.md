@@ -8,13 +8,16 @@
 
 ```
 cases/你的case名/
-├── case.md          # 题目原文（一个问题）
-├── a.md             # 回答 A
-├── b.md             # 回答 B
-└── aspects.json     # 诉求清单（下面详说）
+├── case.md              # 题目原文（一个问题）
+├── a.md                 # 回答 A
+├── b.md                 # 回答 B
+├── aspects.json         # 诉求清单 + QUD + 清单路径（下面详说）
+├── judgments_a.json     # A2 逐词判定（可选，见第五节）
+├── judgments_b.json
+└── inventory.json       # A2 的概念清单（可选，不给就用仓库里的示例）
 ```
 
-`a.md` / `b.md` 直接粘贴原始输出即可，**不用清洗**。Markdown、纯文本、带链接都行——`infoeval/units.py` 会处理格式。
+`a.md` / `b.md` 直接粘贴原始输出即可，**不用清洗**。Markdown、纯文本、带链接都行——`plaineval/units.py` 会处理格式。
 
 ---
 
@@ -78,7 +81,7 @@ cases/你的case名/
 ### 先跑一遍看语块清单
 
 ```bash
-python -m infoeval.cli cases/你的case名 -o out/r.json
+python -m plaineval.cli cases/你的case名 -o out/r.json
 python -c "
 import json; r=json.load(open('out/r.json'))
 for k in ('A','B'):
@@ -88,7 +91,7 @@ for k in ('A','B'):
 或者直接看：
 
 ```python
-from infoeval.units import sections
+from plaineval.units import sections
 for s in sections(open("cases/你的case名/a.md", encoding="utf-8").read()):
     print(s["index"], s["title"])
 ```
@@ -123,14 +126,29 @@ for s in sections(open("cases/你的case名/a.md", encoding="utf-8").read()):
 
 ---
 
+## 第三点五步：A2 的概念清单要自己建
+
+A2 的候选词是从一份**领域相关**的清单里定位出来的。仓库带的
+`plaineval/data/inventory_example.json` 是某个 回答 A 项目的 60 项例子，**不能直接用**。
+
+```
+做法：把该领域里「内行才懂、外行看到会卡住」的说法列出来
+格式：[["概念名", "匹配正则"], ...]
+      第二列可以写同义写法，例如 "风险和副作用分层|副作用分层"
+```
+
+判断标准：**一个不了解这个项目的人看到这个词，会不会卡住？**
+
+---
+
 ## 第四步：跑
 
 ```bash
 # 控制台对照表
-python -m infoeval.cli cases/你的case名
+python -m plaineval.cli cases/你的case名
 
 # 加 JSON + HTML
-python -m infoeval.cli cases/你的case名 -o out/r.json --html out/report.html
+python -m plaineval.cli cases/你的case名 -o out/r.json --html out/report.html
 ```
 
 ---

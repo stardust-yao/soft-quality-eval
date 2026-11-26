@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""info-org-eval —— 回答的信息组织评测
+"""plain-language-eval —— 回答的信息组织评测
 
 八项：
     B1 有没有（覆盖）        评估
@@ -12,10 +12,10 @@
     B8 数量自述对不对        评估（零争议）
 
 用法：
-    from infoeval import run_case
+    from plaineval import run_case
     result = run_case("cases/case01")
 """
-from .core import compare, evaluate, evaluate_pair, load_case, run_case
+from .core import LAYER, ROLE, compare, evaluate, evaluate_pair, load_case, run_case
 
 __version__ = "0.1.0"
-__all__ = ["evaluate", "evaluate_pair", "compare", "load_case", "run_case"]
+__all__ = ["evaluate", "evaluate_pair", "compare", "load_case", "run_case", "ROLE", "LAYER"]
