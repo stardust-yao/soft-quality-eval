@@ -108,6 +108,23 @@ def discover(text: str, inventory) -> list[dict]:
     return picked
 
 
+def check_evidence(j: dict) -> list[str]:
+    """证据自洽校验：判为「未解释」的，E1–E4 必须全部未命中。
+
+    这是防自己写错的一道闸——判了扣分但证据里写着「E3 命中」，
+    说明标签和证据矛盾，必须人工回看。
+    """
+    ev = j.get("evidence") or {}
+    cls = j.get("classification", "")
+    if cls not in FAIL_CLASSES:
+        return []
+    hits = [k for k in ("E1", "E2", "E3", "E4")
+            if str(ev.get(k, "")).startswith(("命中", "有"))]
+    if hits:
+        return [f"{j['concept']}：判为未解释，但 {','.join(hits)} 显示命中"]
+    return []
+
+
 def summarize(judgments: list[dict]) -> dict:
     """按概念去重后汇总。judgments: [{concept, classification, eligible}]"""
     seen, fail, pend, ok = set(), [], [], []
@@ -123,8 +140,10 @@ def summarize(judgments: list[dict]) -> dict:
             pend.append(c)
         elif cls in PASS_CLASSES:
             ok.append(c)
+    conflicts = [m for j in judgments for m in check_evidence(j)]
     return {
         "角色": "评估（唯一计分项，但 K 值 pending）",
+        "证据矛盾": conflicts,
         "判过概念数": len(seen),
         "豁免数": len(ok),
         "未解释陌生概念数": len(fail),
