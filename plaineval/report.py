@@ -75,7 +75,7 @@ def write_html(res: dict, path: str) -> None:
              f"<tbody>{rows}</tbody></table>")
 
     # 归属
-    p.append("<h2>二、八项归属</h2>")
+    p.append("<h2>二、十一项归属</h2>")
     rows = "".join(f"<tr><td>{e(k)}</td><td>{_badge(v)}</td></tr>"
                    for k, v in A["ROLE"].items())
     p.append(f"<table><thead><tr><th>对象</th><th>归属</th></tr></thead><tbody>{rows}</tbody></table>")
